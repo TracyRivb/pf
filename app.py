@@ -324,6 +324,7 @@ st.header("4. Mapa 1: Índice de Desarrollo Social en distritos de interés")
 
 distritos_ids_gdf = cargar_gpkg(DISTRITOS_IDS_URL)
 distritos_ids_gdf_filtrados = filtrar_dataframe(distritos_ids_gdf, busqueda)
+st.dataframe(distritos_ids_gdf_filtrados.drop(columns="geometry"), use_container_width=True)
 
 st.write(
     """
@@ -334,8 +335,6 @@ Para este caso, se enfocará en los distritos con mayor incidencia e influencia 
 También, se considera la variable “IDS” (Índice de Desarrollo Social), que evalua las condiciones de desarrollo de cada distrito a partir de diversos factores socioeconómicos. Este indicador es una herramienta estratégica para la toma de decisiones, ya que, facilita la identificación de territorios con mayores necesidades de intervención y apoyo.
     """
 )
-
-st.dataframe(distritos_ids_gdf_filtrados.drop(columns="geometry"), use_container_width=True)
 
 ids_col = "IDS"
 
