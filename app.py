@@ -141,6 +141,13 @@ poblacion_cantones = (
     .sort_values(by="POBLACION", ascending=False)
 )
 
+st.write(
+    """
+   **Descripción de variables:** La tabla denominada “datos_población” está compuesta por tres columnas principales: “POBLACION”, “DENSIDAD” y “CANTON”. Estas variables permiten representar información demográfica relacionada con los cantones de Costa Rica. La columna “POBLACION” corresponde a la cantidad total de habitantes registrados en cada cantón, mientras que la variable “DENSIDAD” indica la concentración de población en relación con el territorio, generalmente expresada en habitantes por kilómetro cuadrado. La columna “CANTON” identifica el nombre de cada unidad territorial analizada.
+
+    """
+)
+
 st.subheader("Gráfico 1. Población por cantón de interés")
 
 if poblacion_cantones.empty:
@@ -197,6 +204,15 @@ precipitacion_agrupada = precipitacion_mensual.groupby(
     as_index=False,
 )["PRECIPITACION"].sum()
 
+st.write(
+    """
+    **Descripción de variables:** Dentro de las principales variables de la tabla se encuentra la columna "CANTON", la cual identifica el nombre del cantón al que pertenecen los registros climáticos. También, la tabla posee una columna individual para cada mes del año, correspondientes a "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SETIEMBRE", "OCTUBRE", "NOVIEMBRE" y "DICIEMBRE". Cada una de estas columnas almacena la precipitación mensual total registrada en el cantón respectivo, generalmente expresada en milímetros (mm) del año 2020.
+
+Los datos de precipitación mensual son fundamentales para la gestión del riesgo en zonas cercanas al Parque Metropolitano La Libertad, debido a que permiten identificar patrones de comportamiento climático asociados a eventos de lluvias intensas y periodos de alta acumulación hídrica. La información es fundamental para evaluar áreas con mayor susceptibilidad a inundaciones, saturación de suelos y deslizamientos, especialmente en sectores con pendientes pronunciadas, cercanía a ríos o condiciones de vulnerabilidad territorial.
+
+    """
+)
+
 st.subheader("Gráfico 2. Distribución de precipitación mensual por cantón")
 
 if precipitacion_agrupada.empty:
@@ -252,6 +268,17 @@ agrupacion_centros = (
 st.subheader("Tabla de agrupamiento de centros educativos")
 st.dataframe(agrupacion_centros, use_container_width=True)
 
+st.write(
+    """
+  **Descripción de las variables:** La tabla llamada “agrupacion_centros” está compuesta por diferentes columnas por las variables “CENTRO_EDU”, “PEDS”, “RENDIMIENTO_ACADEMICO” y “ESTUDIANTES”.
+
+La columna “CENTRO_EDU” corresponde al nombre de cada centro educativo o escuela analizada dentro del área de estudio. Por su parte, la variable “PEDS” identifica la participación de las instituciones en el Programa de Educación para el Desarrollo Sostenible del Parque Metropolitano La Libertad (PEDS), mediante valores binarios donde 0 representa que el centro educativo no participa en el programa y 1 indica que sí participa.
+
+Asimismo, la columna “RENDIMIENTO_ACADEMICO” contiene información relacionada con el desempeño académico de cada institución educativa, permitiendo realizar comparaciones entre centros educativos y evaluar posibles relaciones con variables territoriales o de participación institucional. La variable “ESTUDIANTES” representa la cantidad total de estudiantes registrados en cada escuela, lo cual permite dimensionar el alcance poblacional de los centros educativos incluidos en el análisis.
+
+    """
+)
+
 st.subheader("Gráfico 3. Relación entre estudiantes y rendimiento académico")
 
 if agrupacion_centros.empty:
@@ -297,6 +324,16 @@ st.header("4. Mapa 1: Índice de Desarrollo Social en distritos de interés")
 
 distritos_ids_gdf = cargar_gpkg(DISTRITOS_IDS_URL)
 distritos_ids_gdf_filtrados = filtrar_dataframe(distritos_ids_gdf, busqueda)
+
+st.write(
+    """
+  **Descripción de las variables:** El GeoPackage (GPKG) seleccionado contiene diversas variables asociadas a la división político-administrativa y a las características sociodemográficas de los distritos analizados. Entre la información disponible se incluyen datos de población total, densidad poblacional, crecimiento demográfico, cantidad de hombres y mujeres, así como otros indicadores relevantes para el análisis territorial.
+
+Para este caso, se enfocará en los distritos con mayor incidencia e influencia sobre el Parque Metropolitano La Libertad, los cuales corresponden a:  San Juan de Dios, Río Azul, Damas, Gravilias, San Antonio, San Rafael Abajo, San Diego, Desamparados, Tirrases, Zapote, Curridabat, Los Guido, Patarrá, San Rafael Arriba y San Miguel. Estos distritos constituyen el principal ámbito de acción e impacto del parque, por lo que su caracterización resulta fundamental para comprender las dinámicas sociales y territoriales del entorno.
+
+También, se considera la variable “IDS” (Índice de Desarrollo Social), que evalua las condiciones de desarrollo de cada distrito a partir de diversos factores socioeconómicos. Este indicador es una herramienta estratégica para la toma de decisiones, ya que, facilita la identificación de territorios con mayores necesidades de intervención y apoyo.
+    """
+)
 
 st.dataframe(distritos_ids_gdf_filtrados.drop(columns="geometry"), use_container_width=True)
 
@@ -356,6 +393,16 @@ poblados_gdf = cargar_gpkg(POBLADOS_URL)
 poblados_gdf_filtrados = filtrar_dataframe(poblados_gdf, busqueda)
 
 st.dataframe(poblados_gdf_filtrados.drop(columns="geometry"), use_container_width=True)
+
+st.write(
+    """
+    **Descripción de las variables:** El GeoPackage (GPKG) seleccionado corresponde a una capa geográfica que almacena información espacial y descriptiva de entidades territoriales. Para cada registro se incluye un identificador único (**fid**), un código de identificación de la entidad (**ET_ID**), el nombre de la entidad (**NOMBRE**), una clasificación o tipo de entidad (**CATEGORIA**), la hoja cartográfica de referencia (**HOJA**) y las coordenadas espaciales (**X** y **Y**) que indican la ubicación geográfica de cada elemento.
+
+
+Los datos se encuentran filtrados por los cantones de interés para el Parque Metropolitano La Libertad que son: Aserrí, Cartago, Curridabat, Desamparados, La Unión, Montes de Oca y San José. Este tipo de información es vital para la gestión territorial y los análisis espaciales, pues, facilita la identificación, localización y caracterización de los elementos presentes en el territorio.
+
+    """
+)
 
 if poblados_gdf_filtrados.empty:
     st.warning("No hay poblados que coincidan con la búsqueda.")
