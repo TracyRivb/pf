@@ -11,7 +11,7 @@ from folium.plugins import MarkerCluster
 from streamlit_folium import st_folium
 
 
-st.set_page_config(page_title="Proyecto Final - Tracy Rivera", layout="wide")
+st.set_page_config(page_title="Datos Geoespaciales del Parque Metropolitano La Libertad", layout="wide")
 
 POBLACION_URL = "https://raw.githubusercontent.com/TracyRivb/datos_poblacion/refs/heads/main/pobla_densi_canton.csv"
 PRECIPITACION_URL = "https://raw.githubusercontent.com/TracyRivb/precipitacion/refs/heads/main/preci_canton.csv"
@@ -69,8 +69,33 @@ def buscar_columna(df, opciones):
     return None
 
 
+def filtrar_dataframe(df, texto):
+    if not texto:
+        return df
+
+    columnas = [columna for columna in df.columns if columna != "geometry"]
+    mascara = (
+        df[columnas]
+        .astype(str)
+        .apply(lambda columna: columna.str.contains(texto, case=False, na=False))
+        .any(axis=1)
+    )
+    return df[mascara]
+
+
 st.title("Datos Geoespaciales del Parque Metropolitano La Libertad")
 st.caption("Estudiante: Tracy Rivera Benavides")
+
+st.sidebar.header("Buscador")
+busqueda = st.sidebar.text_input(
+    "Buscar en tablas, gráficos y mapas",
+    placeholder="Ejemplo: DESAMPARADOS, RIO AZUL, escuela",
+)
+
+if busqueda:
+    st.sidebar.success(f"Filtro activo: {busqueda}")
+else:
+    st.sidebar.info("Sin filtro activo")
 
 st.header("Introducción")
 st.write(
@@ -85,11 +110,12 @@ st.write(
 st.header("1. Datos de población")
 
 datos_poblacion = cargar_csv(POBLACION_URL)
+datos_poblacion_filtrados = filtrar_dataframe(datos_poblacion, busqueda)
 
-st.dataframe(datos_poblacion, use_container_width=True)
+st.dataframe(datos_poblacion_filtrados, use_container_width=True)
 
 poblacion_cantones = (
-    datos_poblacion
+    datos_poblacion_filtrados
     .groupby("CANTON", as_index=False)["POBLACION"]
     .sum()
 )
@@ -101,23 +127,26 @@ poblacion_cantones = (
 
 st.subheader("Gráfico 1. Población por cantón de interés")
 
-fig_poblacion = px.bar(
-    poblacion_cantones,
-    x="CANTON",
-    y="POBLACION",
-    title="Población por cantón de interés",
-    labels={
-        "CANTON": "Cantón",
-        "POBLACION": "Población (número de habitantes)",
-    },
-    text="POBLACION",
-)
+if poblacion_cantones.empty:
+    st.warning("No hay datos de población que coincidan con la búsqueda.")
+else:
+    fig_poblacion = px.bar(
+        poblacion_cantones,
+        x="CANTON",
+        y="POBLACION",
+        title="Población por cantón de interés",
+        labels={
+            "CANTON": "Cantón",
+            "POBLACION": "Población (número de habitantes)",
+        },
+        text="POBLACION",
+    )
 
-fig_poblacion.update_yaxes(tickformat=",d")
-fig_poblacion.update_layout(xaxis_tickangle=-45)
-fig_poblacion.update_traces(textposition="outside")
+    fig_poblacion.update_yaxes(tickformat=",d")
+    fig_poblacion.update_layout(xaxis_tickangle=-45)
+    fig_poblacion.update_traces(textposition="outside")
 
-st.plotly_chart(fig_poblacion, use_container_width=True)
+    st.plotly_chart(fig_poblacion, use_container_width=True)
 
 st.write(
     """
@@ -130,10 +159,11 @@ st.write(
 st.header("2. Datos de precipitación")
 
 precipitacion = cargar_csv(PRECIPITACION_URL)
+precipitacion_filtrada = filtrar_dataframe(precipitacion, busqueda)
 
-st.dataframe(precipitacion, use_container_width=True)
+st.dataframe(precipitacion_filtrada, use_container_width=True)
 
-filtro_precipitacion = precipitacion[precipitacion["CANTON"].isin(CANTONES)]
+filtro_precipitacion = precipitacion_filtrada[precipitacion_filtrada["CANTON"].isin(CANTONES)]
 
 precipitacion_mensual = filtro_precipitacion.melt(
     id_vars="CANTON",
@@ -149,24 +179,27 @@ precipitacion_agrupada = precipitacion_mensual.groupby(
 
 st.subheader("Gráfico 2. Distribución de precipitación mensual por cantón")
 
-fig_precipitacion = px.box(
-    precipitacion_agrupada,
-    x="CANTON",
-    y="PRECIPITACION",
-    title="Distribución de precipitación mensual por cantón de interés",
-    labels={
-        "CANTON": "Cantón",
-        "PRECIPITACION": "Precipitación mensual (mm)",
-        "MES": "Mes",
-    },
-    hover_data={
-        "MES": True,
-        "PRECIPITACION": ":.2f",
-    },
-    points="outliers",
-)
+if precipitacion_agrupada.empty:
+    st.warning("No hay datos de precipitación que coincidan con la búsqueda.")
+else:
+    fig_precipitacion = px.box(
+        precipitacion_agrupada,
+        x="CANTON",
+        y="PRECIPITACION",
+        title="Distribución de precipitación mensual por cantón de interés",
+        labels={
+            "CANTON": "Cantón",
+            "PRECIPITACION": "Precipitación mensual (mm)",
+            "MES": "Mes",
+        },
+        hover_data={
+            "MES": True,
+            "PRECIPITACION": ":.2f",
+        },
+        points="outliers",
+    )
 
-st.plotly_chart(fig_precipitacion, use_container_width=True)
+    st.plotly_chart(fig_precipitacion, use_container_width=True)
 
 st.write(
     """
@@ -178,10 +211,11 @@ st.write(
 st.header("3. Centros educativos")
 
 centros_educativos = cargar_csv(CENTROS_URL)
+centros_educativos_filtrados = filtrar_dataframe(centros_educativos, busqueda)
 
-st.dataframe(centros_educativos, use_container_width=True)
+st.dataframe(centros_educativos_filtrados, use_container_width=True)
 
-centros_peds = centros_educativos[centros_educativos["PEDS"] == 1]
+centros_peds = centros_educativos_filtrados[centros_educativos_filtrados["PEDS"] == 1]
 
 agrupacion_centros = (
     centros_peds
@@ -199,30 +233,33 @@ st.dataframe(agrupacion_centros, use_container_width=True)
 
 st.subheader("Gráfico 3. Relación entre estudiantes y rendimiento académico")
 
-fig_centros = px.scatter(
-    agrupacion_centros,
-    x="ESTUDIANTES",
-    y="RENDIMIENTO_ACADEMICO",
-    text="CENTRO_EDU",
-    title="Relación entre estudiantes y rendimiento académico en instituciones de interés",
-    labels={
-        "ESTUDIANTES": "Cantidad de estudiantes por institución",
-        "RENDIMIENTO_ACADEMICO": "Rendimiento académico",
-        "CENTRO_EDU": "Centro educativo",
-    },
-    hover_data={
-        "PEDS": True,
-        "ESTUDIANTES": ",",
-        "RENDIMIENTO_ACADEMICO": ":.2f",
-    },
-)
+if agrupacion_centros.empty:
+    st.warning("No hay centros educativos que coincidan con la búsqueda.")
+else:
+    fig_centros = px.scatter(
+        agrupacion_centros,
+        x="ESTUDIANTES",
+        y="RENDIMIENTO_ACADEMICO",
+        text="CENTRO_EDU",
+        title="Relación entre estudiantes y rendimiento académico en instituciones de interés",
+        labels={
+            "ESTUDIANTES": "Cantidad de estudiantes por institución",
+            "RENDIMIENTO_ACADEMICO": "Rendimiento académico",
+            "CENTRO_EDU": "Centro educativo",
+        },
+        hover_data={
+            "PEDS": True,
+            "ESTUDIANTES": ",",
+            "RENDIMIENTO_ACADEMICO": ":.2f",
+        },
+    )
 
-fig_centros.update_traces(
-    marker=dict(color="red", size=10),
-    textposition="top center",
-)
+    fig_centros.update_traces(
+        marker=dict(color="red", size=10),
+        textposition="top center",
+    )
 
-st.plotly_chart(fig_centros, use_container_width=True)
+    st.plotly_chart(fig_centros, use_container_width=True)
 
 st.write(
     """
@@ -235,45 +272,49 @@ st.write(
 st.header("4. Mapa 1: Índice de Desarrollo Social en distritos de interés")
 
 distritos_ids_gdf = cargar_gpkg(DISTRITOS_IDS_URL)
+distritos_ids_gdf_filtrados = filtrar_dataframe(distritos_ids_gdf, busqueda)
 
-st.dataframe(distritos_ids_gdf.drop(columns="geometry"), use_container_width=True)
+st.dataframe(distritos_ids_gdf_filtrados.drop(columns="geometry"), use_container_width=True)
 
 ids_col = "IDS"
 
 nombre_distrito_col = buscar_columna(
-    distritos_ids_gdf,
+    distritos_ids_gdf_filtrados,
     ["DISTRITO", "NOM_DIST", "NOMBRE", "distrito", "nombre"],
 )
 
-min_ids = float(distritos_ids_gdf[ids_col].min())
-max_ids = float(distritos_ids_gdf[ids_col].max())
+if distritos_ids_gdf_filtrados.empty:
+    st.warning("No hay distritos que coincidan con la búsqueda.")
+else:
+    min_ids = float(distritos_ids_gdf_filtrados[ids_col].min())
+    max_ids = float(distritos_ids_gdf_filtrados[ids_col].max())
 
-colormap = cm.linear.RdYlGn_09.scale(min_ids, max_ids)
-colormap.caption = "Índice de Desarrollo Social"
+    colormap = cm.linear.RdYlGn_09.scale(min_ids, max_ids)
+    colormap.caption = "Índice de Desarrollo Social"
 
-mapa_ids = folium.Map(location=[9.93, -84.08], zoom_start=11, tiles="OpenStreetMap")
+    mapa_ids = folium.Map(location=[9.93, -84.08], zoom_start=11, tiles="OpenStreetMap")
 
-for _, registro in distritos_ids_gdf.iterrows():
-    nombre = registro[nombre_distrito_col] if nombre_distrito_col else "Distrito"
-    ids = registro[ids_col]
+    for _, registro in distritos_ids_gdf_filtrados.iterrows():
+        nombre = registro[nombre_distrito_col] if nombre_distrito_col else "Distrito"
+        ids = registro[ids_col]
 
-    popup = f"<b>Distrito:</b> {nombre}<br><b>IDS:</b> {ids}"
+        popup = f"<b>Distrito:</b> {nombre}<br><b>IDS:</b> {ids}"
 
-    folium.GeoJson(
-        registro.geometry,
-        style_function=lambda feature, valor=ids: {
-            "fillColor": colormap(valor),
-            "color": "black",
-            "weight": 1,
-            "fillOpacity": 0.7,
-        },
-        tooltip=f"{nombre}: IDS {ids}",
-        popup=popup,
-    ).add_to(mapa_ids)
+        folium.GeoJson(
+            registro.geometry,
+            style_function=lambda feature, valor=ids: {
+                "fillColor": colormap(valor),
+                "color": "black",
+                "weight": 1,
+                "fillOpacity": 0.7,
+            },
+            tooltip=f"{nombre}: IDS {ids}",
+            popup=popup,
+        ).add_to(mapa_ids)
 
-colormap.add_to(mapa_ids)
+    colormap.add_to(mapa_ids)
 
-st_folium(mapa_ids, width=1100, height=550)
+    st_folium(mapa_ids, width=1100, height=550)
 
 st.write(
     """
@@ -285,27 +326,31 @@ st.write(
 st.header("5. Mapa 2: Poblados en cantones de interés")
 
 poblados_gdf = cargar_gpkg(POBLADOS_URL)
+poblados_gdf_filtrados = filtrar_dataframe(poblados_gdf, busqueda)
 
-st.dataframe(poblados_gdf.drop(columns="geometry"), use_container_width=True)
+st.dataframe(poblados_gdf_filtrados.drop(columns="geometry"), use_container_width=True)
 
-mapa_poblados = folium.Map(location=[9.9, -84.0], zoom_start=11, tiles="OpenStreetMap")
+if poblados_gdf_filtrados.empty:
+    st.warning("No hay poblados que coincidan con la búsqueda.")
+else:
+    mapa_poblados = folium.Map(location=[9.9, -84.0], zoom_start=11, tiles="OpenStreetMap")
 
-cluster = MarkerCluster(name="Poblados").add_to(mapa_poblados)
+    cluster = MarkerCluster(name="Poblados").add_to(mapa_poblados)
 
-for _, registro in poblados_gdf.iterrows():
-    geometria = registro.geometry
-    punto = geometria if geometria.geom_type == "Point" else geometria.centroid
+    for _, registro in poblados_gdf_filtrados.iterrows():
+        geometria = registro.geometry
+        punto = geometria if geometria.geom_type == "Point" else geometria.centroid
 
-    nombre = registro["NOMBRE"] if "NOMBRE" in poblados_gdf.columns else "Poblado"
-    categoria = registro["CATEGORIA"] if "CATEGORIA" in poblados_gdf.columns else "Sin categoría"
+        nombre = registro["NOMBRE"] if "NOMBRE" in poblados_gdf_filtrados.columns else "Poblado"
+        categoria = registro["CATEGORIA"] if "CATEGORIA" in poblados_gdf_filtrados.columns else "Sin categoría"
 
-    folium.Marker(
-        location=[punto.y, punto.x],
-        popup=folium.Popup(f"<b>Categoría:</b> {categoria}", max_width=250),
-        tooltip=nombre,
-    ).add_to(cluster)
+        folium.Marker(
+            location=[punto.y, punto.x],
+            popup=folium.Popup(f"<b>Categoría:</b> {categoria}", max_width=250),
+            tooltip=nombre,
+        ).add_to(cluster)
 
-st_folium(mapa_poblados, width=1100, height=550)
+    st_folium(mapa_poblados, width=1100, height=550)
 
 st.write(
     """
