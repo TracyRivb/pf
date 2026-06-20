@@ -100,7 +100,6 @@ else:
 st.header("Introducción")
 st.write(
     """
-    ## **Introducción**
 El Parque Metropolitano La Libertad surge como una iniciativa de rehabilitación urbana orientada a transformar un antiguo espacio industrial (ocupado durante más de 50 años por la fábrica de Productos de Concreto) en un parque dedicado al Desarrollo Humano. Este proyecto se materializa a partir de una Alianza Público-Privada para el Desarrollo (APPD) entre la Fundación Parque Metropolitano La Libertad y el Ministerio de Cultura y Juventud de Costa Rica (MCJ), con el propósito de gestionar y consolidar un espacio que promueva oportunidades de crecimiento social, cultural, educativo y ambiental para la población (La Libertad, 2024). Desde su creación en el año 2008, el parque se localiza en los cantones de Desamparados y La Unión, en un contexto territorial caracterizado por una alta densidad poblacional y una fuerte interacción con distritos cercanos como Aserrí, Damas, Gravilias, Los Guido, Patarrá, Río Azul, San Antonio, San Miguel y Tirrases. De la misma manera, el parque cuenta con una extensión aproximada de 32 hectáreas de espacio público y ocho hectáreas de bosque conservado, lo que lo convierte en un espacio relevante para el desarrollo social y ambiental de la región (La Libertad, 2024).
 
 ### **Estado actual de los datos geoespaciales**
@@ -167,9 +166,13 @@ else:
 
 st.write(
     """
-    Este gráfico permite comparar la cantidad de habitantes en los cantones de interés.
-    Los cantones con mayor población pueden representar una mayor demanda potencial de
-    actividades, programas y servicios relacionados con el Parque Metropolitano La Libertad.
+    **Descripción del gráfico**: El gráfico 1 contiene información relacionada con la población de distintos cantones de Costa Rica, específicamente: Aserrí, Cartago, Curridabat, Desamparados, La Unión, Montes de Oca y San José. Para cada uno de estos cantones se registra la cantidad total de habitantes, permitiendo visualizar la distribución poblacional de las principales zonas de influencia vinculadas al Parque Metropolitano La Libertad.
+
+La selección de estos cantones responde a criterios de proximidad territorial y dinámica de uso del parque, ya que corresponden a los sectores desde donde proviene una gran parte de las personas visitantes. Debido a esta relación espacial y funcional, la información poblacional de estos territorios es importante para comprender el contexto demográfico asociado al área de estudio.
+
+De acuerdo con los datos presentados, el cantón con mayor cantidad de habitantes es San José, con una población de 313 262 habitantes, mientras que el cantón con menor población corresponde a Aserrí, con 49 271 habitantes. Estas diferencias demográficas permiten identificar variaciones importantes en la concentración poblacional de los territorios analizados.
+
+
     """
 )
 
@@ -220,8 +223,9 @@ else:
 
 st.write(
     """
-    El gráfico de cajas permite comparar la variación mensual de la precipitación por cantón.
-    Cantones con rangos más amplios presentan mayor variabilidad entre meses secos y lluviosos.
+   **Descripción del gráfico:** en el gráfico 2 se observa que todos los cantones presentan un comportamiento relativamente similar, con medianas cercanas a los 200 mm mensuales. Sin embargo, Aserrí destaca por registrar los valores máximos de precipitación más altos, alcanzando aproximadamente 460 mm, lo que indica una mayor intensidad o acumulación de lluvias en ciertos meses del año. Asimismo, presenta una dispersión considerable, reflejando una alta variabilidad temporal de la precipitación.
+
+Por otro lado, cantones como Curridabat, Montes de Oca y San José muestran medianas ligeramente inferiores y rangos relativamente amplios, lo que sugiere fluctuaciones importantes entre meses secos y lluviosos. Cartago y La Unión presentan distribuciones más concentradas, indicando un comportamiento pluviométrico más estable en comparación con otros cantones analizados.
     """
 )
 
@@ -280,9 +284,12 @@ else:
 
 st.write(
     """
-    Este gráfico muestra si existe alguna relación visual entre la cantidad de estudiantes
-    y el rendimiento académico. Los puntos permiten comparar instituciones y observar
-    cuáles tienen mayor población estudiantil o mayor rendimiento.
+    **Descripción del gráfico:** El gráfico 3 muestra la relación entre la cantidad de estudiantes por institución educativa y el rendimiento académico de distintos centros educativos vinculados al área de influencia del Parque Metropolitano La Libertad.
+
+Entre los resultados más importantes se destaca que la Escuela de Gravilias presenta uno de los rendimientos académicos más altos del conjunto analizado, mientras que instituciones como la Escuela Francisco Gamboa reflejan valores comparativamente menores. Además, la Escuela Quince de Agosto sobresale por ser la institución con mayor cantidad de estudiantes, aunque su rendimiento académico se mantiene en valores intermedios respecto al resto de escuelas.
+
+De esta manera, el gráfico no muestra una relación lineal claramente definida entre la cantidad de estudiantes y el rendimiento académico, lo que sugiere que el desempeño académico no depende únicamente del tamaño de la población estudiantil.
+
     """
 )
 
@@ -335,8 +342,11 @@ else:
 
 st.write(
     """
-    El mapa permite identificar diferencias sociales entre distritos. Los sectores con IDS
-    más bajo pueden ser considerados prioritarios para programas sociales, culturales o educativos.
+    **Descripción del mapa:** se muestra la distribución del Índice de Desarrollo Social (IDS) en los distritos que conforman el área de influencia del Parque Metropolitano La Libertad. Los resultados evidencian diferencias importantes entre los territorios analizados, con valores que oscilan entre 63,43 y 86,02 puntos.
+
+Los distritos con los valores más bajos corresponden a Río Azul (63,43) y Los Guido (66,38), mientras que los índices más altos se presentan en Gravilias (86,02), San Antonio (84,81) y Curridabat (83,35). En general, la mayoría de los distritos se ubican en rangos intermedios de desarrollo social.
+
+Esta información permite al parque identificar territorios con mayores necesidades sociales y orientar de manera más eficiente la planificación de proyectos, programas y actividades comunitarias, priorizando aquellos distritos con menores niveles de desarrollo social.
     """
 )
 
@@ -371,9 +381,10 @@ else:
 
 st.write(
     """
-    La concentración de marcadores ayuda a reconocer zonas urbanas con mayor presencia de poblados.
-    Esta información puede apoyar la planificación de actividades y la priorización de territorios
-    con mayor población potencial beneficiaria.
+    **Descripción del mapa:** se muestra la distribución de los poblados dentro del área de influencia del Parque Metropolitano La Libertad. La mayor concentración se localiza en los sectores urbanos de San José, Desamparados, Curridabat y sus alrededores, donde se agrupan hasta 329 poblados, evidenciando una alta densidad de asentamientos en comparación con las zonas periféricas y rurales del sur.
+
+Esta información es importante para el parque porque permite identificar las áreas con mayor cantidad de población potencial beneficiaria de sus programas y actividades. Además, facilita la planificación de proyectos, la definición de estrategias de alcance comunitario y la priorización de recursos hacia los territorios con mayor concentración de poblados y, por ende, con un mayor potencial de impacto social.
+
     """
 )
 
