@@ -100,10 +100,27 @@ else:
 st.header("Introducción")
 st.write(
     """
-    El Parque Metropolitano La Libertad es un espacio de rehabilitación urbana ubicado entre
-    Desamparados y La Unión. Esta aplicación presenta tablas, gráficos y mapas que ayudan
-    a interpretar datos de población, precipitación, centros educativos, desarrollo social
-    y poblados del área de influencia del parque.
+    ## **Introducción**
+El Parque Metropolitano La Libertad surge como una iniciativa de rehabilitación urbana orientada a transformar un antiguo espacio industrial (ocupado durante más de 50 años por la fábrica de Productos de Concreto) en un parque dedicado al Desarrollo Humano. Este proyecto se materializa a partir de una Alianza Público-Privada para el Desarrollo (APPD) entre la Fundación Parque Metropolitano La Libertad y el Ministerio de Cultura y Juventud de Costa Rica (MCJ), con el propósito de gestionar y consolidar un espacio que promueva oportunidades de crecimiento social, cultural, educativo y ambiental para la población (La Libertad, 2024). Desde su creación en el año 2008, el parque se localiza en los cantones de Desamparados y La Unión, en un contexto territorial caracterizado por una alta densidad poblacional y una fuerte interacción con distritos cercanos como Aserrí, Damas, Gravilias, Los Guido, Patarrá, Río Azul, San Antonio, San Miguel y Tirrases. De la misma manera, el parque cuenta con una extensión aproximada de 32 hectáreas de espacio público y ocho hectáreas de bosque conservado, lo que lo convierte en un espacio relevante para el desarrollo social y ambiental de la región (La Libertad, 2024).
+
+### **Estado actual de los datos geoespaciales**
+El Parque Metropolitano La Libertad cuenta con información geográfica utilizada para apoyar los procesos de análisis, planificación y toma de decisiones dentro de la institución. Sin embargo, estos datos no son generados directamente por el parque, sino que provienen de diversas instituciones externas que los comparten para su uso institucional.
+
+Algunos datos geográficos disponibles son:
+
+**1. Territorio:** presenta la información geográfica básica que permite ubicar y contextualizar espacialmente el Parque Metropolitano La Libertad dentro del territorio nacional y local. Incluye el límite del parque, así como las divisiones administrativas cercanas como cantones y distritos, lo que permite comprender la relación del parque con su entorno territorial y administrativo.
+
+**2. Ambiente:** se integra información relacionadas con los elementos naturales y de protección ambiental presentes en el territorio. Se incluyen precipitación, ríos, zonas protectoras y el límite del Corredor Biológico Interurbano Bicentenario Tiribí, con el fin de identificar áreas de valor ecológico, conectividad ambiental y recursos naturales que influyen en la planificación y gestión del territorio alrededor del parque.
+
+**3. Población:** muestra información demográfica y social del área de influencia del parque. Contiene datos sobre vivienda, población e indicadores socioeconómicos, lo que permite comprender las características de la población cercana y analizar aspectos como densidad poblacional, condiciones sociales y necesidades territoriales que pueden influir en la planificación de programas y proyectos institucionales.
+
+**4. Institucionalidad:** reúne información sobre las principales instituciones presentes en el territorio, especialmente aquellas relacionadas con educación y administración pública. Incluye la ubicación de escuelas, colegios y gobiernos locales, lo que permite visualizar la red institucional del área y comprender cómo se articulan las instituciones con el desarrollo social y territorial de las comunidades cercanas al parque.
+
+**5. Industria y comercio:** presenta información sobre la actividad económica del territorio, enfocándose en la localización de pymes y emprendimientos presentes en el área de influencia del parque. Esta información permite identificar dinámicas económicas locales, oportunidades de desarrollo productivo y posibles vínculos entre la actividad económica y los programas de formación o emprendimiento impulsados por el parque.
+
+**6. Organizaciones comunales:** se identifican las principales organizaciones comunitarias que participan en la gestión y desarrollo local del territorio. Se incluyen asociaciones de desarrollo, juntas comunales y comités, con el objetivo de reconocer los actores sociales presentes en las comunidades cercanas al parque y fortalecer la articulación entre la institución y las organizaciones comunitarias para la implementación de proyectos y actividades territoriales.
+
+A continuación, se muestran tres gráficos empleando la información anteriomente descrita mediante la biblioteca plotly (biblioteca para gráficos interactivos), así también como dos mapas a partir de las  bibliotecas folium y leafmap.
     """
 )
 
